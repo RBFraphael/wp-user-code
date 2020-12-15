@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       Wordpress User Code
  * Plugin URI:        https://github.com/rbfraphael/wp-user-code
- * Description:       Adicione códigos JavaScript e estilos CSS ao seu site Wordpress
+ * Description:       Add custom code to your Wordpress site
  * Version:           1.0.0
  * Author:            RBFraphael
  * Author URI:        https://rbfraphael.com.br/
@@ -29,7 +29,9 @@ function wuc_init()
     if(!function_exists('get_field')){
         wuc_load_acf();
     }
-    include_once(WUC_PATH."/wuc-fields.php");
+
+    include_once(WUC_PATH."/includes/acf-addons/acf-addons.php");
+    include_once(WUC_PATH."/includes/wuc-fields.php");
 }
 add_action("after_setup_theme", "wuc_init");
 
@@ -42,11 +44,14 @@ function wuc_load_acf()
 {
     define('MY_ACF_PATH', WUC_PATH."/includes/acf/");
     define('MY_ACF_URL', WUC_URL."/includes/acf/");
+
     include_once(MY_ACF_PATH."acf.php");
+
     add_filter("acf/settings/url", "my_acf_settings_url");
     function my_acf_settings_url($url){
         return MY_ACF_URL;
     }
+
     add_filter("acf/settings/show_admin", "__return_false");
 }
 
@@ -57,13 +62,15 @@ function wuc_load_acf()
  */
 function wuc_options_page()
 {
-    acf_add_options_sub_page([
-        'page_title' => "Códigos Adicionais",
-        'menu_title' => "Códigos Adicionais",
-        'menu_slug' => "wp-user-code",
-        'icon_url' => "dashicons-media-code",
-        'parent_slug' => "options-general.php"
-    ]);
+    if(function_exists("acf_add_options_sub_page")){
+        acf_add_options_sub_page([
+            'page_title' => "Additional Code",
+            'menu_title' => "Additional Code",
+            'menu_slug' => "wp-user-code",
+            'icon_url' => "dashicons-media-code",
+            'parent_slug' => "options-general.php"
+        ]);
+    }
 }
 add_action("acf/init", "wuc_options_page");
 
@@ -74,7 +81,8 @@ add_action("acf/init", "wuc_options_page");
  */
 function wuc_head_code()
 {
-    return get_field("wuc_head");
+    $head_code = get_field("wuc_head_code", "options");
+    echo "\n".$head_code."\n";
 }
 add_filter("wp_head", "wuc_head_code");
 
@@ -98,6 +106,7 @@ add_filter("the_content", "wuc_content_code");
  */
 function wuc_footer_code()
 {
-    return get_field("wuc_footer");
+    $footer_code = get_field("wuc_footer_code", "options");
+    echo "\n".$footer_code."\n";
 }
 add_filter("wp_footer", "wuc_footer_code");

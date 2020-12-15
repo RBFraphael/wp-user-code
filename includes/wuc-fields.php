@@ -9,7 +9,7 @@ if( function_exists('acf_add_local_field_group') ):
         'fields' => array(
             array(
                 'key' => 'field_5fd7affc122b9',
-                'label' => '&lt;head&gt; code',
+                'label' => 'Head code',
                 'name' => 'wuc_head_code',
                 'type' => 'textarea',
                 'instructions' => '',
@@ -23,7 +23,7 @@ if( function_exists('acf_add_local_field_group') ):
                 'default_value' => '',
                 'placeholder' => '',
                 'maxlength' => '',
-                'rows' => 5,
+                'rows' => 8,
                 'new_lines' => '',
             ),
             array(
@@ -42,7 +42,7 @@ if( function_exists('acf_add_local_field_group') ):
                 'default_value' => '',
                 'placeholder' => '',
                 'maxlength' => '',
-                'rows' => 5,
+                'rows' => 8,
                 'new_lines' => '',
             ),
             array(
@@ -61,12 +61,12 @@ if( function_exists('acf_add_local_field_group') ):
                 'default_value' => '',
                 'placeholder' => '',
                 'maxlength' => '',
-                'rows' => 5,
+                'rows' => 8,
                 'new_lines' => '',
             ),
             array(
                 'key' => 'field_5fd7b02a122ba',
-                'label' => '&lt;footer&gt; code',
+                'label' => 'Footer code',
                 'name' => 'wuc_footer_code',
                 'type' => 'textarea',
                 'instructions' => '',
@@ -80,7 +80,7 @@ if( function_exists('acf_add_local_field_group') ):
                 'default_value' => '',
                 'placeholder' => '',
                 'maxlength' => '',
-                'rows' => 5,
+                'rows' => 8,
                 'new_lines' => '',
             ),
         ),
