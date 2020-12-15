@@ -52,7 +52,7 @@ function wuc_load_acf()
         return MY_ACF_URL;
     }
 
-    // add_filter("acf/settings/show_admin", "__return_false");
+    add_filter("acf/settings/show_admin", "__return_false");
 }
 
 /**
