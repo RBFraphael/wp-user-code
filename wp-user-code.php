@@ -52,7 +52,7 @@ function wuc_load_acf()
         return MY_ACF_URL;
     }
 
-    add_filter("acf/settings/show_admin", "__return_false");
+    // add_filter("acf/settings/show_admin", "__return_false");
 }
 
 /**
@@ -110,3 +110,80 @@ function wuc_footer_code()
     echo "\n".$footer_code."\n";
 }
 add_filter("wp_footer", "wuc_footer_code");
+
+/**
+ * Enqueue scripts
+ * 
+ * Load local and global JavaScript files
+ */
+function wuc_enqueue_scripts()
+{
+    while(have_rows("wuc_single_js")){
+        the_row();
+        wp_register_script(get_sub_field("js_id"), get_sub_field("js_file"), [], NULL, get_sub_field("load_in_head") ? false : true);
+        wp_enqueue_script(get_sub_field("js_id"));
+    }
+
+    while(have_rows("wuc_single_js", "options")){
+        the_row();
+        wp_register_script(get_sub_field("js_id", "options"), get_sub_field("js_file", "options"), [], NULL, get_sub_field("load_in_head", "options") ? false : true);
+        wp_enqueue_script(get_sub_field("js_id", "options"));
+    }
+}
+add_action("wp_enqueue_scripts", "wuc_enqueue_scripts");
+
+/**
+ * Enqueue styles
+ * 
+ * Load local and global CSS files
+ */
+function wuc_enqueue_styles()
+{
+    while(have_rows("wuc_single_css")){
+        the_row();
+        wp_register_style(get_sub_field("css_id"), get_sub_field("css_file"));
+        wp_enqueue_style(get_sub_field("css_id"));
+    }
+
+    while(have_rows("wuc_single_css", "options")){
+        the_row();
+        wp_register_style(get_sub_field("css_id", "options"), get_sub_field("css_file", "options"));
+        wp_enqueue_style(get_sub_field("css_id", "options"));
+    }
+}
+add_action("wp_enqueue_scripts", "wuc_enqueue_styles");
+
+/**
+ * Upload formats
+ * 
+ * Allow upload of CSS and JS files
+ */
+function wuc_upload_formats($mime_types)
+{
+    $mime_types['css'] = "text/css";
+    $mime_types['js'] = "application/javascript";
+    
+    return $mime_types;
+}
+add_filter("upload_mimes", "wuc_upload_formats");
+
+/**
+ * Check file
+ * 
+ * Check file name and extension on upload
+ */
+function wuc_check_file_ext($types, $file, $filename, $mimes)
+{
+    if(strpos($filename, ".css") !== false){
+        $types['ext'] = "css";
+        $types['type'] = "text/css";
+    }
+
+    if(strpos($filename, ".js") !== false){
+        $types['ext'] = "js";
+        $types['type'] = "application/javascript";
+    }
+
+    return $types;
+}
+add_filter("wp_check_filetype_and_ext", "wuc_check_file_ext", 10, 4);
