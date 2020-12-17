@@ -84,7 +84,7 @@ function wuc_head_code()
     $head_code = get_field("wuc_head_code", "options");
     echo "\n".$head_code."\n";
 }
-add_filter("wp_head", "wuc_head_code");
+add_filter("wp_head", "wuc_head_code", 1);
 
 /**
  * Content code
@@ -97,7 +97,7 @@ function wuc_content_code($content)
     $after = get_field("wuc_after_content", "options");
     return $before."\n".$content."\n".$after;
 }
-add_filter("the_content", "wuc_content_code");
+add_filter("the_content", "wuc_content_code", 10);
 
 /**
  * Footer code
@@ -109,7 +109,7 @@ function wuc_footer_code()
     $footer_code = get_field("wuc_footer_code", "options");
     echo "\n".$footer_code."\n";
 }
-add_filter("wp_footer", "wuc_footer_code");
+add_filter("wp_footer", "wuc_footer_code", 10);
 
 /**
  * Enqueue scripts
