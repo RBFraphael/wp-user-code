@@ -3,7 +3,7 @@
  * Plugin Name:       Wordpress User Code
  * Plugin URI:        https://github.com/rbfraphael/wp-user-code
  * Description:       Add custom code to your Wordpress site
- * Version:           1.0.0
+ * Version:           1.0.1
  * Author:            RBFraphael
  * Author URI:        https://rbfraphael.com.br/
  * License:           GPL v3 or later
@@ -17,7 +17,7 @@ if(!defined("ABSPATH")): exit; endif;
  */
 define('WUC_PATH', plugin_dir_path(__FILE__));
 define('WUC_URL', plugin_dir_url(__FILE__));
-define('WUC_VERSION', "1.0.0");
+define('WUC_VERSION', "1.0.1");
 
 /**
  * Plugin initialization
@@ -82,7 +82,9 @@ add_action("acf/init", "wuc_options_page");
 function wuc_head_code()
 {
     $head_code = get_field("wuc_head_code", "options");
-    echo "\n".$head_code."\n";
+    echo "\n<!-- WP User Code - Head Start -->";
+    echo "\n".$head_code;
+    echo "\n<!-- WP User Code - Head End -->\n";
 }
 add_filter("wp_head", "wuc_head_code", 1);
 
@@ -94,8 +96,17 @@ add_filter("wp_head", "wuc_head_code", 1);
 function wuc_content_code($content)
 {
     $before = get_field("wuc_before_content", "options");
+    $before_prefix = "\n<!-- WP User Code - Before Content Start -->";
+    $before_sufix = "\n<!-- WP User Code - Before Content End -->\n";
+
     $after = get_field("wuc_after_content", "options");
-    return $before."\n".$content."\n".$after;
+    $after_prefix = "\n<!-- WP User Code - After Content Start -->";
+    $after_sufix = "\n<!-- WP User Code - After Content End -->\n";
+
+    $before_content = $before_prefix."\n".$before."\n".$before_sufix;
+    $after_content = $after_prefix."\n".$after."\n".$after_sufix;
+
+    return $before_content."\n".$content."\n".$after_content;
 }
 add_filter("the_content", "wuc_content_code", 10);
 
@@ -107,7 +118,9 @@ add_filter("the_content", "wuc_content_code", 10);
 function wuc_footer_code()
 {
     $footer_code = get_field("wuc_footer_code", "options");
-    echo "\n".$footer_code."\n";
+    echo "\n<!-- WP User Code - Footer Start -->";
+    echo "\n".$footer_code;
+    echo "\n<!-- WP User Code - Footer End -->\n";
 }
 add_filter("wp_footer", "wuc_footer_code", 10);
 
@@ -120,14 +133,32 @@ function wuc_enqueue_scripts()
 {
     while(have_rows("wuc_js_files", "options")){
         the_row();
-        wp_register_script(get_sub_field("js_id", "options"), get_sub_field("js_file", "options"), [], NULL, get_sub_field("load_in_head", "options") ? false : true);
-        wp_enqueue_script(get_sub_field("js_id", "options"));
+
+        $js_id = get_sub_field("js_id", "options");
+        $js_file = get_sub_field("js_file", "options");
+        $js_head = get_sub_field("load_in_head", "options");
+
+        if(wp_script_is($js_id, "registered")){
+            wp_deregister_script($js_id);
+        }
+
+        wp_register_script($js_id, $js_file, [], NULL, $js_head ? false : true);
+        wp_enqueue_script($js_id);
     }
 
     while(have_rows("wuc_js_files")){
         the_row();
-        wp_register_script(get_sub_field("js_id"), get_sub_field("js_file"), [], NULL, get_sub_field("load_in_head") ? false : true);
-        wp_enqueue_script(get_sub_field("js_id"));
+        
+        $js_id = get_sub_field("js_id");
+        $js_file = get_sub_field("js_file");
+        $js_head = get_sub_field("load_in_head");
+
+        if(wp_script_is($js_id, "registered")){
+            wp_deregister_script($js_id);
+        }
+
+        wp_register_script($js_id, $js_file, [], NULL, $js_head ? false : true);
+        wp_enqueue_script($js_id);
     }
 }
 add_action("wp_enqueue_scripts", "wuc_enqueue_scripts");
@@ -141,14 +172,30 @@ function wuc_enqueue_styles()
 {
     while(have_rows("wuc_css_files", "options")){
         the_row();
-        wp_register_style(get_sub_field("css_id", "options"), get_sub_field("css_file", "options"));
-        wp_enqueue_style(get_sub_field("css_id", "options"));
+
+        $css_id = get_sub_field("css_id", "options");
+        $css_file = get_sub_field("css_file", "options");
+
+        if(wp_style_is($css_id, "registered")){
+            wp_deregister_style($css_id);
+        }
+
+        wp_register_style($css_id, $css_file);
+        wp_enqueue_style($css_id);
     }
 
     while(have_rows("wuc_css_files")){
         the_row();
-        wp_register_style(get_sub_field("css_id"), get_sub_field("css_file"));
-        wp_enqueue_style(get_sub_field("css_id"));
+
+        $css_id = get_sub_field("css_id");
+        $css_file = get_sub_field("css_file");
+
+        if(wp_style_is($css_id, "registered")){
+            wp_deregister_style($css_id);
+        }
+        
+        wp_register_style($css_id, $css_file);
+        wp_enqueue_style($css_id);
     }
 }
 add_action("wp_enqueue_scripts", "wuc_enqueue_styles");
