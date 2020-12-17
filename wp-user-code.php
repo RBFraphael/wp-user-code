@@ -114,20 +114,20 @@ add_filter("wp_footer", "wuc_footer_code");
 /**
  * Enqueue scripts
  * 
- * Load local and global JavaScript files
+ * Load global and local JavaScript files
  */
 function wuc_enqueue_scripts()
 {
-    while(have_rows("wuc_single_js")){
-        the_row();
-        wp_register_script(get_sub_field("js_id"), get_sub_field("js_file"), [], NULL, get_sub_field("load_in_head") ? false : true);
-        wp_enqueue_script(get_sub_field("js_id"));
-    }
-
-    while(have_rows("wuc_single_js", "options")){
+    while(have_rows("wuc_js_files", "options")){
         the_row();
         wp_register_script(get_sub_field("js_id", "options"), get_sub_field("js_file", "options"), [], NULL, get_sub_field("load_in_head", "options") ? false : true);
         wp_enqueue_script(get_sub_field("js_id", "options"));
+    }
+
+    while(have_rows("wuc_js_files")){
+        the_row();
+        wp_register_script(get_sub_field("js_id"), get_sub_field("js_file"), [], NULL, get_sub_field("load_in_head") ? false : true);
+        wp_enqueue_script(get_sub_field("js_id"));
     }
 }
 add_action("wp_enqueue_scripts", "wuc_enqueue_scripts");
@@ -135,20 +135,20 @@ add_action("wp_enqueue_scripts", "wuc_enqueue_scripts");
 /**
  * Enqueue styles
  * 
- * Load local and global CSS files
+ * Load global and local CSS files
  */
 function wuc_enqueue_styles()
 {
-    while(have_rows("wuc_single_css")){
-        the_row();
-        wp_register_style(get_sub_field("css_id"), get_sub_field("css_file"));
-        wp_enqueue_style(get_sub_field("css_id"));
-    }
-
-    while(have_rows("wuc_single_css", "options")){
+    while(have_rows("wuc_css_files", "options")){
         the_row();
         wp_register_style(get_sub_field("css_id", "options"), get_sub_field("css_file", "options"));
         wp_enqueue_style(get_sub_field("css_id", "options"));
+    }
+
+    while(have_rows("wuc_css_files")){
+        the_row();
+        wp_register_style(get_sub_field("css_id"), get_sub_field("css_file"));
+        wp_enqueue_style(get_sub_field("css_id"));
     }
 }
 add_action("wp_enqueue_scripts", "wuc_enqueue_styles");

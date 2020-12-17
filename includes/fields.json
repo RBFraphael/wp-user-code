@@ -5,8 +5,8 @@
         "fields": [
             {
                 "key": "field_5fd8ea0369720",
-                "label": "Additional CSS",
-                "name": "wuc_single_css",
+                "label": "CSS files to include",
+                "name": "wuc_css_files",
                 "type": "repeater",
                 "instructions": "",
                 "required": 0,
@@ -64,8 +64,8 @@
             },
             {
                 "key": "field_5fd8ea3969723",
-                "label": "Additional JS",
-                "name": "wuc_single_js",
+                "label": "JavaScript files to include",
+                "name": "wuc_js_files",
                 "type": "repeater",
                 "instructions": "",
                 "required": 0,

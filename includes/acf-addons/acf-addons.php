@@ -19,8 +19,9 @@ class WUC_ACF_Addons
 
     function register_assets()
     {
-		wp_register_script('acf-pro-input', WUC_URL.'/includes/acf-addons/assets/js/acf-pro-input.min.js', ['acf-input'], "5.9.1");
-		wp_register_style('acf-pro-input', WUC_URL.'/includes/acf-addons/assets/css/acf-pro-input.css', ['acf-input'], "5.9.1");
+        $url = plugin_dir_url(__FILE__);
+		wp_register_script('acf-pro-input', $url.'/includes/acf-addons/assets/js/acf-pro-input.min.js', ['acf-input'], "5.9.1");
+		wp_register_style('acf-pro-input', $url.'/includes/acf-addons/assets/css/acf-pro-input.css', ['acf-input'], "5.9.1");
     }
     
     function input_admin_enqueue_scripts()
